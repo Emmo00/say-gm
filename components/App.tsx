@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Pin } from "lucide-react";
+import { Pin, Share } from "lucide-react";
 import sdk, { Context } from "@farcaster/miniapp-sdk";
 
 export default function App() {
@@ -30,6 +30,10 @@ export default function App() {
 
   const handleAddMiniApp = () => {
     // TODO: Here you would integrate with Farcaster API to add a new MiniApp
+  };
+
+  const handleShareMiniApp = () => {
+    // TODO: Here you would integrate with Farcaster API to share the MiniApp
   };
 
   return (
@@ -77,8 +81,17 @@ export default function App() {
         </p>
       </div>
 
-      {/* Pin Button */}
-      <div className="mt-auto">
+      <div className="mt-auto flex flex-col items-center gap-4 w-full">
+        {/* Share MiniApp Button */}
+        <Button
+          onClick={handleShareMiniApp}
+          className="w-full h-14 text-lg font-semibold rounded-2xl bg-gradient-to-r from-pink-300 via-orange-200 to-orange-200 hover:from-orange-400 hover:via-orange-300 hover:to-pink-300 text-black border-0 shadow-lg transition-all duration-200 hover:shadow-xl"
+        >
+          <Share className="w-4 h-4 mr-2 inline-block font-bold" />
+          Share MiniApp
+        </Button>
+
+        {/* Pin Button */}
         <Button
           variant="ghost"
           size="sm"
