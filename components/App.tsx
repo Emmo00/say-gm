@@ -1,17 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Pin } from "lucide-react";
+import sdk, { Context } from "@farcaster/miniapp-sdk";
 
 export default function App() {
   const [hasGMedToday, setHasGMedToday] = useState(false);
-  const username = "username";
+  const [appContext, setAppContext] = useState<Context.MiniAppContext>();
 
+  useEffect(() => {
+    async function setupThings() {
+      const context = await sdk.context;
+      if (context) {
+        setAppContext(context);
+      }
+
+      // NOTICE: get app ready IMPORTANT
+      sdk.actions.ready();
+    }
+
+    setupThings();
+  }, []);
   const handleSayGM = () => {
     setHasGMedToday(true);
-    // Here you would integrate with Farcaster API to post the GM cast
+    // TODO: Here you would integrate with Farcaster API to post the GM cast
+  };
+
+  const handleAddMiniApp = () => {
+    // TODO: Here you would integrate with Farcaster API to add a new MiniApp
   };
 
   return (
@@ -19,12 +37,9 @@ export default function App() {
       {/* Profile Picture */}
       <div className="mb-8">
         <Avatar className="w-20 h-20 border-2 border-gray-100">
-          <AvatarImage
-            src="/placeholder.svg?height=80&width=80"
-            alt="Profile"
-          />
+          <AvatarImage src={appContext?.user?.pfpUrl} alt="Profile" />
           <AvatarFallback className="text-xl font-bold bg-gray-50">
-            {username.charAt(0).toUpperCase()}
+            {appContext?.user?.username?.charAt(0)?.toUpperCase() ?? ""}
           </AvatarFallback>
         </Avatar>
       </div>
@@ -32,7 +47,7 @@ export default function App() {
       {/* Greeting */}
       <div className="mb-12 text-center">
         <h1 className="text-2xl font-bold text-black font-sans">
-          gm, @{username} 👋
+          gm, @{appContext?.user?.username} 👋
         </h1>
       </div>
 
@@ -68,6 +83,7 @@ export default function App() {
           variant="ghost"
           size="sm"
           className="text-gray-500 hover:text-gray-700 text-xs font-medium rounded-full px-4 py-2 hover:bg-gray-50"
+          onClick={handleAddMiniApp}
         >
           <Pin className="w-3 h-3 mr-1" />
           Pin this MiniApp

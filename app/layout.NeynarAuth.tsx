@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { getSession } from '~/auth';
-import '~/app/globals.css';
+import './globals.css';
 import { Providers } from './providers';
 import { APP_NAME, APP_DESCRIPTION } from '../lib/constants';
 
