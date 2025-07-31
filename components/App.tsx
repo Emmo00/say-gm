@@ -46,17 +46,25 @@ export default function App() {
     }
   }, [mintTransactionHash, errorWhileMinting]);
 
-  const handleSayGM = () => {
+  const handleSayGM = async () => {
     setHasGMedToday(true);
     // TODO: Here you would integrate with Farcaster API to post the GM cast
+    await sdk.actions.composeCast({
+      text: "GM frens! 🌅",
+    });
   };
 
-  const handleAddMiniApp = () => {
+  const handleAddMiniApp = async () => {
     // TODO: Here you would integrate with Farcaster API to add a new MiniApp
+    await sdk.actions.addMiniApp();
   };
 
-  const handleShareMiniApp = () => {
+  const handleShareMiniApp = async () => {
     // TODO: Here you would integrate with Farcaster API to share the MiniApp
+    await sdk.actions.composeCast({
+      text: `Check out this awesome MiniApp: Say GM 🌅`,
+      embeds: ["https://say-gm-eta.vercel.app/"],
+    });
   };
 
   const handleMintGMNFT = async () => {
