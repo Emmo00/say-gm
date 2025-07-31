@@ -9,7 +9,7 @@ contract GMNFT is ERC721Enumerable, Ownable {
 
     string public baseURI;
 
-    mapping(address => bool) hasMinted;
+    mapping(address => bool) public hasMinted;
 
     constructor(
         string memory _baseURI

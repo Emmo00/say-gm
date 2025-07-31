@@ -5,10 +5,23 @@ import { Button } from "./ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Pin, Share } from "lucide-react";
 import sdk, { Context } from "@farcaster/miniapp-sdk";
+import { GM_NFT_ABI, GM_NFT_CONTRACT_ADDRESS } from "../lib/constants";
+import { useWriteContract } from "wagmi";
+import { base, celo } from "viem/chains";
+import { useAccount, useConnect } from "wagmi";
 
 export default function App() {
   const [hasGMedToday, setHasGMedToday] = useState(false);
   const [appContext, setAppContext] = useState<Context.MiniAppContext>();
+  const {
+    writeContractAsync,
+    data: mintTransactionHash,
+    isPending: isMinting,
+    isError: errorWhileMinting,
+    error: mintingError,
+  } = useWriteContract({});
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
 
   useEffect(() => {
     async function setupThings() {
@@ -23,6 +36,16 @@ export default function App() {
 
     setupThings();
   }, []);
+
+  useEffect(() => {
+    if (mintTransactionHash) {
+      console.log("Mint transaction hash:", mintTransactionHash);
+    }
+    if (errorWhileMinting) {
+      console.error("Error while minting NFT:", mintingError);
+    }
+  }, [mintTransactionHash, errorWhileMinting]);
+
   const handleSayGM = () => {
     setHasGMedToday(true);
     // TODO: Here you would integrate with Farcaster API to post the GM cast
@@ -34,6 +57,25 @@ export default function App() {
 
   const handleShareMiniApp = () => {
     // TODO: Here you would integrate with Farcaster API to share the MiniApp
+  };
+
+  const handleMintGMNFT = async () => {
+    if (!isConnected) {
+      // Prompt user to connect wallet
+      connect({ connector: connectors[0] });
+      return;
+    }
+
+    const resultHash = await writeContractAsync({
+      address: GM_NFT_CONTRACT_ADDRESS,
+      abi: GM_NFT_ABI,
+      functionName: "mintGM",
+      chainId: celo.id,
+      chain: celo,
+      account: address,
+    });
+
+    console.log("Minting GM NFT transaction hash:", resultHash);
   };
 
   return (
@@ -82,6 +124,15 @@ export default function App() {
       </div>
 
       <div className="mt-auto flex flex-col items-center gap-4 w-full">
+        {/* Mint GM NFT */}
+        <Button
+          className="w-full h-14 text-lg font-semibold rounded-2xl bg-gradient-to-r from-blue-300 via-blue-200 to-blue-100 hover:from-blue-400 hover:via-blue-300 hover:to-blue-200 text-black border-0 shadow-lg transition-all duration-200 hover:shadow-xl"
+          onClick={handleMintGMNFT}
+          disabled={isMinting}
+        >
+          Mint GM NFT
+        </Button>
+
         {/* Share MiniApp Button */}
         <Button
           onClick={handleShareMiniApp}
