@@ -1,10 +1,10 @@
-# gm-gm 🌅
+# say-gm 🌅
 
 A demo Farcaster miniapp that helps you say "gm" (good morning) to your friends on Farcaster with style!
 
 ## 🎯 About
 
-**gm-gm** is a Farcaster miniapp that demonstrates the core features and best practices for building engaging miniapps on the Farcaster protocol. It showcases user authentication, context awareness, and seamless integration with the Farcaster ecosystem.
+**say-gm** is a Farcaster miniapp that demonstrates the core features and best practices for building engaging miniapps on the Farcaster protocol. It showcases user authentication, context awareness, and seamless integration with the Farcaster ecosystem.
 
 ## ✨ Features
 
@@ -50,7 +50,7 @@ A demo Farcaster miniapp that helps you say "gm" (good morning) to your friends 
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd gm-gm
+   cd say-gm
    ```
 
 2. **Install dependencies**
@@ -77,7 +77,7 @@ Create a `.env.local` file in the root directory:
 ```env
 # Required
 NEXT_PUBLIC_URL=https://your-app-url.vercel.app
-NEXT_PUBLIC_MINI_APP_NAME=gm-gm
+NEXT_PUBLIC_MINI_APP_NAME=say-gm
 NEXT_PUBLIC_MINI_APP_BUTTON_TEXT=Say GM
 
 # Optional - Neynar Integration
