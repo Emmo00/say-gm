@@ -79,7 +79,7 @@ export default function App() {
   const handleShareMiniApp = async () => {
     // TODO: Here you would integrate with Farcaster API to share the MiniApp
     await sdk.actions.composeCast({
-      text: `Check out this awesome MiniApp: Say GM 🌅`,
+      text: `Don't forget to Say GM 🌅`,
       embeds: ["https://say-gm-eta.vercel.app/"],
     });
   };
