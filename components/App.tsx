@@ -7,7 +7,7 @@ import { Pin, Share } from "lucide-react";
 import sdk, { Context } from "@farcaster/miniapp-sdk";
 import { GM_NFT_ABI, GM_NFT_CONTRACT_ADDRESS } from "../lib/constants";
 import { useWriteContract } from "wagmi";
-import { base, celo } from "viem/chains";
+import { base } from "viem/chains";
 import { useAccount, useConnect } from "wagmi";
 
 export default function App() {
@@ -66,11 +66,11 @@ export default function App() {
       return;
     }
 
-    // switch chain to Celo if not already
+    // switch chain to base if not already
     try {
       await sdk.wallet.ethProvider.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: celo.id.toString() }],
+        params: [{ chainId: base.id.toString() }],
       });
     } catch (error) {
       console.error("Failed to switch chain:", error);
@@ -81,8 +81,8 @@ export default function App() {
       address: GM_NFT_CONTRACT_ADDRESS,
       abi: GM_NFT_ABI,
       functionName: "mintGM",
-      chainId: celo.id,
-      chain: celo,
+      chainId: base.id,
+      chain: base,
       account: address,
     });
 

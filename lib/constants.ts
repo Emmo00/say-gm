@@ -142,7 +142,7 @@ export const SIGNED_KEY_REQUEST_TYPE = [
 ];
 
 export const GM_NFT_CONTRACT_ADDRESS =
-  "0x4675fab04f1be6b877a97a685014bbbe2c61109f";
+  "0xf8f2d4315DB5db38f3e5c45D0bCd59959c603d9b";
 
 export const GM_NFT_ABI = [
   {
