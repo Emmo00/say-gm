@@ -66,6 +66,17 @@ export default function App() {
       return;
     }
 
+    // switch chain to Celo if not already
+    try {
+      await sdk.wallet.ethProvider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: celo.id.toString() }],
+      });
+    } catch (error) {
+      console.error("Failed to switch chain:", error);
+      return;
+    }
+
     const resultHash = await writeContractAsync({
       address: GM_NFT_CONTRACT_ADDRESS,
       abi: GM_NFT_ABI,
