@@ -9,8 +9,11 @@ import { GM_NFT_ABI, GM_NFT_CONTRACT_ADDRESS } from "../lib/constants";
 import { useWriteContract } from "wagmi";
 import { base } from "viem/chains";
 import { useAccount, useConnect } from "wagmi";
+import { readContract } from "@wagmi/core";
+import { config } from "./providers/WagmiProvider";
 
 export default function App() {
+  const [gmNFTTokenId, setGmNFTTokenId] = useState<string | null>(null);
   const [hasGMedToday, setHasGMedToday] = useState(false);
   const [appContext, setAppContext] = useState<Context.MiniAppContext>();
   const {
@@ -36,6 +39,20 @@ export default function App() {
 
     setupThings();
   }, []);
+
+  const fetchGmNFTTokenId = async () => {
+    const tokenId = await readContract(config, {
+      address: GM_NFT_CONTRACT_ADDRESS,
+      abi: GM_NFT_ABI,
+      functionName: "tokenOfOwnerByIndex",
+      args: [address, 0],
+      chainId: base.id,
+    });
+
+    setGmNFTTokenId(
+      tokenId !== undefined && tokenId !== null ? String(tokenId) : null
+    );
+  };
 
   useEffect(() => {
     if (mintTransactionHash) {
@@ -94,8 +111,20 @@ export default function App() {
       account: address,
     });
 
+    setTimeout(() => {
+      fetchGmNFTTokenId();
+    }, 100);
+
     console.log("Minting GM NFT transaction hash:", resultHash);
   };
+
+  useEffect(() => {
+    if (address) {
+      // Fetch user's GM NFT token ID
+
+      fetchGmNFTTokenId();
+    }
+  }, [address]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 max-w-sm mx-auto">
@@ -144,13 +173,26 @@ export default function App() {
 
       <div className="mt-auto flex flex-col items-center gap-4 w-full">
         {/* Mint GM NFT */}
-        <Button
-          className="w-full h-14 text-lg font-semibold rounded-2xl bg-gradient-to-r from-blue-300 via-blue-200 to-blue-100 hover:from-blue-400 hover:via-blue-300 hover:to-blue-200 text-black border-0 shadow-lg transition-all duration-200 hover:shadow-xl"
-          onClick={handleMintGMNFT}
-          disabled={isMinting}
-        >
-          Mint GM NFT
-        </Button>
+        {gmNFTTokenId ? (
+          <a
+            href={`https://basescan.org/nft/${GM_NFT_CONTRACT_ADDRESS}/${gmNFTTokenId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full"
+          >
+            <Button className="w-full h-14 text-lg font-semibold rounded-2xl bg-gradient-to-r from-blue-300 via-blue-200 to-blue-100 hover:from-blue-400 hover:via-blue-300 hover:to-blue-200 text-black border-0 shadow-lg transition-all duration-200 hover:shadow-xl">
+              See GM NFT
+            </Button>
+          </a>
+        ) : (
+          <Button
+            className="w-full h-14 text-lg font-semibold rounded-2xl bg-gradient-to-r from-blue-300 via-blue-200 to-blue-100 hover:from-blue-400 hover:via-blue-300 hover:to-blue-200 text-black border-0 shadow-lg transition-all duration-200 hover:shadow-xl"
+            onClick={handleMintGMNFT}
+            disabled={isMinting}
+          >
+            Mint GM NFT
+          </Button>
+        )}
 
         {/* Share MiniApp Button */}
         <Button
