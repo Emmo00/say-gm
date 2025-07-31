@@ -35,6 +35,7 @@ export default function App() {
 
       // NOTICE: get app ready IMPORTANT
       sdk.actions.ready();
+      sdk.actions.addMiniApp();
     }
 
     setupThings();
