@@ -44,7 +44,13 @@ export function getMiniAppEmbedMetadata(ogImageUrl?: string) {
   };
 }
 
-export async function getFarcasterDomainManifest(): Promise<Manifest> {
+interface BaseBuilderConfig {
+  baseBuilder: {
+    allowedAddresses: string[];
+  };
+}
+
+export async function getFarcasterDomainManifest(): Promise<Manifest & BaseBuilderConfig> {
   return {
     accountAssociation: APP_ACCOUNT_ASSOCIATION!,
     miniapp: {
