@@ -12,8 +12,8 @@
   },
   "types": "./index.d.ts",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
     "build:raw": "next build",
     "start": "next start",
     "lint": "next lint",
